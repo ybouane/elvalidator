@@ -41,8 +41,9 @@ export default class ElValidator {
 				});
 			} else if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
 				schema[k] = this._checkSchema(schema_, fieldName);
+				continue;
 			} else if(ElValidator.isArray(schema[k].type)) {
-				if(schema[k].type.length==0)
+				if(schema[k].type.length!=1)
 					throw new Error(fieldName+' must have a single item.');
 				schema[k].type = [this._checkSchema({v:schema[k].type[0]}, fieldName).v];
 				if(ElValidator.hasOwnProperty(schema_, 'minEntries'))
@@ -254,7 +255,7 @@ export default class ElValidator {
 								return;
 							}
 						}
-						fieldVal = await this._validate(fieldVal || {}, schema, fieldsPrefix);
+						fieldVal = await this._validate(fieldVal, schema, fieldsPrefix);
 					}
 				break;
 			}
