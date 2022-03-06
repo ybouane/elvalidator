@@ -30,37 +30,40 @@ import ElValidator from 'elvalidator';
 // Set up the validator object
 //let validator = new ElValidator(schema, options);
 let validator = new ElValidator({
-	name				: { type: String, required:true, trim:true, minlength:3 },
-	age					: { type: Number, required:true, integer:true, min:18, max:100 },
-	agreedTelemetry		: { type: Boolean, default:false },
+  name             : { type: String, required:true, trim:true, minlength:3 },
+  age              : { type: Number, required:true, integer:true, min:18, max:100 },
+  agreedTelemetry  : { type: Boolean, default:false },
 
-	// Array example:
-	tags				: [
-		{ type: String, minlength:3, lowercase:true, trim:true, match: /^[a-z0-9]+$/  }
-	],
+  // Array example:
+  tags             : [
+    { type: String, minlength:3, lowercase:true, trim:true, match: /^[a-z0-9]+$/  }
+  ],
 
-	// Object example:
-	settings	: {
-		darkMode	: { type: Boolean, default:false },
-		codeEditor	: { type: String, required:false, default:'atom', enum:['atom', 'vstudio', 'notepad++'] },
-	}
+  // Object example:
+  settings	       : {
+    darkMode    : { type: Boolean, default:false },
+    codeEditor  : { type: String, required:false, default:'atom', enum:['atom', 'vstudio', 'notepad++'] },
+  }
 }, {
-	strictMode			: true, // When disabled, the validator will go easy on the errors. (i.e. a number is provided instead of a string the number will be converted to a string instead of throwing an error)
-	throwUnkownFields	: false,// Throw error when an unknown field is present
-	accumulateErrors	: false,// Validate everything and then show big error message (vs. throw error as soon as an issue is detected)
+  // When disabled, the validator will go easy on the errors. (i.e. a number is provided instead of a string the number will be converted to a string instead of throwing an error)
+  strictMode        : true,
+  // Throw error when an unknown field is present
+  throwUnkownFields : false,
+  // Validate everything and then show big error message (vs. throw error as soon as an issue is detected)
+  accumulateErrors  : false,
 });
 
 // Validate/Sanitize a data object
 // If there's an error, it will be thrown. You can thus use a try ... catch block to process the errors.
 var sanitizedData = await validator.validate({
-	name				: 'Yassine',
-	age					: 27,
+  name        : 'Yassine',
+  age         : 27,
 
-	tags				: ['PROgrammer', 'javascript '],
-	settings			: {
-		darkMode	: false,
-	},
-	other				: 'unknown field',
+  tags        : ['PROgrammer', 'javascript '],
+  settings    : {
+    darkMode  : false,
+  },
+  other       : 'unknown field',
 });
 
 console.log(sanitizedData);
