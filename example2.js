@@ -24,8 +24,8 @@ req.body.tags = req.body.tags.map(tag=>tag.toLowerCase());
 
 // With ElValidator
 let sanitized = await ElValidator.validate(req.body, {
-	name	: { type: String, required: true, minlength:3 },
+	name	: { type: String, required: true, minLength:3 },
 	tags	: [
-		{ type: String, required:true, lowercase:true, minlength:2, match:/[a-z0-9_]+/ }
+		{ type: String, required:true, lowercase:true, minLength:2, match:/[a-z0-9_]+/ }
 	],
 })

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.2.0] - 2022-03-06
+### Changed
+- Renamed minlength and maxlength options to minLength and maxLength to match mongoose's schema.
+
 ## [1.1.0] - 2022-03-06
 ### Fixed
 - Schema checker bug solved where name/type fields were being overwritten in the case of a sub-schema.

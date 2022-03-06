@@ -96,8 +96,8 @@ Outputs:
 		lowercase	: false, // Force string to lower case
 		uppercase	: false, // Force string to UPPER CASE
 		trim		: false, // Trim text (remove whitespace at the start and end of the string)
-		minlength	: 3, // Minimum length of the string
-		maxlength	: 15, // Maximum length of the string
+		minLength	: 3, // Minimum length of the string
+		maxLength	: 15, // Maximum length of the string
 		enum		: ['hello', 'world'], // Array with valid values for this field
 		match		: /^(hello|world)$/i, // String must match with this regex
 

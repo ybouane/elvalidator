@@ -56,10 +56,10 @@ export default class ElValidator {
 				if(ElValidator.hasOwnProperty(schema[k].type[0], 'required'))
 					schema[k].required = !!schema[k].type[0].required;
 			} else if(schema[k].type===String) {
-				if(ElValidator.hasOwnProperty(schema_, 'maxlength'))
-					schema[k].maxlength = parseInt(schema_.maxlength) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'maxlength'))
-					schema[k].maxlength = parseInt(schema_.maxlength) || 0;
+				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
+					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
+				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
+					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
 
 				if(ElValidator.hasOwnProperty(schema_, 'lowercase'))
 					schema[k].lowercase = !!schema_.lowercase;
@@ -144,15 +144,15 @@ export default class ElValidator {
 					if(schema.trim)
 						fieldVal = fieldVal.trim();
 
-					if(ElValidator.hasOwnProperty(schema, 'maxlength') && fieldVal.length>schema.maxlength) {
+					if(ElValidator.hasOwnProperty(schema, 'maxLength') && fieldVal.length>schema.maxLength) {
 						if(!this.options.strictMode) {
-							fieldVal = fieldVal.subString(0, schema.maxlength);
+							fieldVal = fieldVal.subString(0, schema.maxLength);
 						} else {
-							this._error('The "'+fieldName+'" field must be at most '+ schema.maxlength +' characters long.');
+							this._error('The "'+fieldName+'" field must be at most '+ schema.maxLength +' characters long.');
 						}
 					}
-					if(ElValidator.hasOwnProperty(schema, 'minlength') && fieldVal.length>schema.minlength) {
-						this._error('The "'+fieldName+'" field must be at least '+ schema.minlength +' characters long.');
+					if(ElValidator.hasOwnProperty(schema, 'minLength') && fieldVal.length<schema.minLength) {
+						this._error('The "'+fieldName+'" field must be at least '+ schema.minLength +' characters long.');
 					}
 					if(ElValidator.hasOwnProperty(schema, 'enum') && !schema.enum.includes(fieldVal)) {
 						this._error('The "'+fieldName+'" field has an invalid value.');
