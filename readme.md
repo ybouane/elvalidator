@@ -1,6 +1,8 @@
 # ElValidator
-[![NPM version][npm-image]][npm-url]
-[![Downloads][downloads-image]][npm-url]
+![Version](https://img.shields.io/npm/v/elvalidator)
+![NPM Downloads](https://img.shields.io/npm/dt/elvalidator)
+![License](https://img.shields.io/npm/l/elvalidator)
+
 
 ElValidator is a JSON Object validator and sanitizer. It's a great little tool for validating user input and sanitizing.
 It's heavily inspired from the familiar Mongoose schema format with a few more features. (Note: ElValidator doesn't attempt to strictly match the Mongoose validator)
