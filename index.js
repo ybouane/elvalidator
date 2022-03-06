@@ -58,8 +58,8 @@ export default class ElValidator {
 			} else if(schema[k].type===String) {
 				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
 					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
-					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
+				if(ElValidator.hasOwnProperty(schema_, 'minLength'))
+					schema[k].minLength = parseInt(schema_.minLength) || 0;
 
 				if(ElValidator.hasOwnProperty(schema_, 'lowercase'))
 					schema[k].lowercase = !!schema_.lowercase;

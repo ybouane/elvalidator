@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.3.0] - 2022-03-06
+### Fixed
+- Fixed minLength not being registered during checkSchema step.
+
 ## [1.2.0] - 2022-03-06
 ### Changed
 - Renamed minlength and maxlength options to minLength and maxLength to match mongoose's schema.
