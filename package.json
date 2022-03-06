@@ -1,0 +1,40 @@
+{
+  "name": "elvalidator",
+  "version": "1.0.0",
+  "description": "Validate and Sanitize JSON objects.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx webpack build --config ./webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ybouane/elvalidator.git"
+  },
+  "keywords": [
+    "validator",
+    "validate",
+    "sanitize",
+    "object",
+    "javascript",
+    "user",
+    "input",
+    "input",
+    "check",
+    "email",
+    "string",
+    "security",
+    "json",
+    "object",
+    "sanitizer",
+    "mongoose",
+    "validator"
+  ],
+  "author": "ybouane",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ybouane/elvalidator/issues"
+  },
+  "homepage": "https://github.com/ybouane/elvalidator#readme"
+}
