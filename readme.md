@@ -10,7 +10,7 @@ It's heavily inspired from the familiar Mongoose schema format with a few more f
 
 * 0 dependencies
 * Easy to use
-* Lightweight (8.7Kb minified)
+* Lightweight (8.51Kb minified)
 
 # Installation
 ```bash
