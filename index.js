@@ -1,4 +1,4 @@
-
+export const Mixed = Symbol('Mixed');
 export default class ElValidator {
 	constructor(schema={}, options={
 		strictMode			: true, // When disabled, the validator will go easy on the errors. (i.e. a number is provided instead of a string the number will be converted to a string instead of throwing an error)
@@ -87,6 +87,8 @@ export default class ElValidator {
 			} else if(schema[k].type===Boolean) {
 
 			} else if(schema[k].type===Object) {
+
+			} else if(schema[k].type===Mixed) {
 
 			} else {
 				throw new Error(fieldName+' has an invalid value for the "type" field.');
@@ -212,8 +214,11 @@ export default class ElValidator {
 						}
 					}
 				break;
+				case Mixed:
 
-				default: // Object
+				break;
+
+				default: // Array or sub-schema
 					if(ElValidator.isArray(schema.type)) {
 						if(!ElValidator.isArray(fieldVal)) {
 							if(!this.options.strictMode) {
@@ -345,7 +350,6 @@ export default class ElValidator {
 			VimeoVideo		: { type:String, name: 'Vimeo Video Url', required: true, lowercase:false, trim:true, match:/^(http|https)?:\/\/(www\.|player\.)?vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|video\/|)(\d+)(?:|\/\?)/},
 		};
 	}
-	/* Not needed
 	static get Types() {
 		return {
 			String	: String,
@@ -353,8 +357,9 @@ export default class ElValidator {
 			Boolean	: Boolean,
 			Array	: Array,
 			Object	: Object,
+			Mixed	: Mixed,
 		}
-	}*/
+	}
 
 
 	static hasOwnProperty(obj, key) {

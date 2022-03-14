@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.4.0] - 2022-03-14
+### Added
+- Added Mixed type to ElValidator for validating mixed inputs.
+- Added Types static property to ElValidator.
+
 ## [1.3.0] - 2022-03-06
 ### Fixed
 - Fixed minLength not being registered during checkSchema step.
