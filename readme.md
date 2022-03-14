@@ -195,6 +195,25 @@ This type allows you to accept Objects with arbitrary fields and no particular v
 	}
 }
 ```
+
+## Mixed
+This type allows you to accept any type of input with no particular validation.
+```javascript
+{
+	field	: {
+		type		: ElValidator.Types.Mixed,
+		name		: "Field Name", // For cleaner error messages
+		required	: false, // Is this a mandatory field?
+		default		: null, // If provided, the required field is not considered
+
+		validator	: async (value) => { // Manually validate/sanitize the value
+			if(!value)
+				throw new Error('Invalid value');
+			return value;
+		},
+	}
+}
+```
 ## Sub-Schema
 ```javascript
 {
