@@ -39,7 +39,7 @@ export default class ElValidator {
 				schema[k].$or = schema_.$or.map((sch, i) => {
 					return this._checkSchema({v:sch}, fieldName+'.$or['+i+']').v;
 				});
-			} else if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
+			} else if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
 				schema[k] = this._checkSchema(schema_, fieldName);
 				continue;
 			} else if(ElValidator.isArray(schema[k].type)) {

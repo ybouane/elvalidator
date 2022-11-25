@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.5.0] - 2022-11-25
+### Fixed
+- Fixed Readme file. Was still using lowercase minlength instead of minLength in examples.
+
 ## [1.4.0] - 2022-03-14
 ### Added
 - Added Mixed type to ElValidator for validating mixed inputs.

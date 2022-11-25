@@ -30,13 +30,13 @@ import ElValidator from 'elvalidator';
 // Set up the validator object
 //let validator = new ElValidator(schema, options);
 let validator = new ElValidator({
-  name             : { type: String, required:true, trim:true, minlength:3 },
+  name             : { type: String, required:true, trim:true, minLength:3 },
   age              : { type: Number, required:true, integer:true, min:18, max:100 },
   agreedTelemetry  : { type: Boolean, default:false },
 
   // Array example:
   tags             : [
-    { type: String, minlength:3, lowercase:true, trim:true, match: /^[a-z0-9]+$/  }
+    { type: String, minLength:3, lowercase:true, trim:true, match: /^[a-z0-9]+$/  }
   ],
 
   // Object example:
