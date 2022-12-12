@@ -84,6 +84,15 @@ export default class ElValidator {
 					schema[k].max = parseInt(schema_.max) || 0;
 				if(ElValidator.hasOwnProperty(schema_, 'integer'))
 					schema[k].integer = !!schema_.integer;
+				if(ElValidator.hasOwnProperty(schema_, 'enum')) {
+					if(!ElValidator.isArray(schema_.enum))
+						throw new Error(fieldName+' must have an array value for its enum field.');
+					schema[k].enum = schema_.enum.map(e=>{
+						if(typeof e != 'number')
+							throw new Error(fieldName+' enum values need to be numbers.');
+						return parseInt(e)
+					});
+				}
 			} else if(schema[k].type===Boolean) {
 
 			} else if(schema[k].type===Object) {
@@ -192,6 +201,9 @@ export default class ElValidator {
 						else {
 							this._error('The "'+fieldName+'" field must be greater than "'+schema.min+'".');
 						}
+					}
+					if(ElValidator.hasOwnProperty(schema, 'enum') && !schema.enum.includes(fieldVal)) {
+						this._error('The "'+fieldName+'" field has an invalid value.');
 					}
 				break;
 				case Boolean:

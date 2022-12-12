@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.6.0] - 2022-12-12
+### Added
+- Added enum property to Number validator.
+
 ## [1.5.0] - 2022-11-25
 ### Fixed
 - Fixed Readme file. Was still using lowercase minlength instead of minLength in examples.

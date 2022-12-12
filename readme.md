@@ -121,6 +121,7 @@ Outputs:
 		integer		: false, // Force number to be an integer
 		min			: 3, // Minimum value of the number
 		max			: 15, // Maximum value of the number
+		enum		: [5, 7, 12], // Array with valid values for this field
 
 		validator	: async (value) => { // Manually validate/sanitize the value
 			if(!value)
