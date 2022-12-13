@@ -140,7 +140,7 @@ export default class ElValidator {
 			throw new Error(err);
 	}
 	async _validateField(fieldVal, schema, fieldsPrefix) {
-		var fieldName = schema.name || fieldsPrefix;
+		var fieldName = schema.name || fieldsPrefix;
 		if(typeof fieldVal!='undefined') {
 			switch(schema.type) {
 				case String:
@@ -188,7 +188,7 @@ export default class ElValidator {
 							return;
 						}
 					}
-					if(ElValidator.hasOwnProperty(schema, 'integer') && Math.round(fieldVal) != fieldVal) {
+					if(ElValidator.hasOwnProperty(schema, 'integer') && schema.integer && Math.round(fieldVal) != fieldVal) {
 						if(!this.options.strictMode)
 							fieldVal = Math.round(fieldVal);
 						else {
@@ -354,7 +354,7 @@ export default class ElValidator {
 			} else {
 				var fieldVal = data[k];
 				if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
-					fieldVal = data[k] || {};
+					fieldVal = data[k] || {};
 				}
 				var val = await this._validateField(fieldVal, schema[k], fieldsPrefix?fieldsPrefix+'.'+k:k);
 				if(typeof val!='undefined')

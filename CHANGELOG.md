@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.6.6] - 2022-12-13
+### Fixed
+- integer option not properly checked
+
 ## [1.6.5] - 2022-12-13
 ### Fixed
 - $or operator bug when there is no match
