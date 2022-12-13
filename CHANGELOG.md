@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.6.5] - 2022-12-13
+### Fixed
+- $or operator bug when there is no match
+- When an Array has a minEntries value abore 0, it automatically gets marked as required.
+### Added
+- Added enum property to Mixed validator.
+
 ## [1.6.0] - 2022-12-12
 ### Added
 - Added enum property to Number validator.

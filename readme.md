@@ -206,6 +206,7 @@ This type allows you to accept any type of input with no particular validation.
 		name		: "Field Name", // For cleaner error messages
 		required	: false, // Is this a mandatory field?
 		default		: null, // If provided, the required field is not considered
+		enum		: [false, 5, 'auto'], // Array with valid values for this field
 
 		validator	: async (value) => { // Manually validate/sanitize the value
 			if(!value)

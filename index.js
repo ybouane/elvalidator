@@ -55,6 +55,9 @@ export default class ElValidator {
 
 				if(ElValidator.hasOwnProperty(schema[k].type[0], 'required'))
 					schema[k].required = !!schema[k].type[0].required;
+
+				if(schema[k].minEntries && schema[k].minEntries>0)
+					schema[k].required = true;
 			} else if(schema[k].type===String) {
 				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
 					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
@@ -98,7 +101,11 @@ export default class ElValidator {
 			} else if(schema[k].type===Object) {
 
 			} else if(schema[k].type===Mixed) {
-
+				if(ElValidator.hasOwnProperty(schema_, 'enum')) {
+					if(!ElValidator.isArray(schema_.enum))
+						throw new Error(fieldName+' must have an array value for its enum field.');
+					schema[k].enum = schema_.enum;
+				}
 			} else {
 				throw new Error(fieldName+' has an invalid value for the "type" field.');
 			}
@@ -227,7 +234,9 @@ export default class ElValidator {
 					}
 				break;
 				case Mixed:
-
+					if(ElValidator.hasOwnProperty(schema, 'enum') && !schema.enum.includes(fieldVal)) {
+						this._error('The "'+fieldName+'" field has an invalid value.');
+					}
 				break;
 
 				default: // Array or sub-schema
@@ -321,8 +330,10 @@ export default class ElValidator {
 						fieldVal = undefined;
 						try {
 							fieldVal = await this._validateField(initialVal, $or, fieldsPrefix?fieldsPrefix+'.'+k:k);
-							if(this.errors.length==0 && typeof fieldVal!='undefined') {
+							if(this.errors.length==0 && typeof fieldVal!='undefined') { // We found a match
 								break;
+							} else {
+								fieldVal = undefined;
 							}
 						} catch(e) {
 							fieldVal = undefined;
