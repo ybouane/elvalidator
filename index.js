@@ -13,115 +13,107 @@ export default class ElValidator {
 
 
 	_checkSchema(schema, prefix='Schema') {
-		if(!ElValidator.isObject(schema))
-			throw new Error(prefix+' must be an object.');
-		for(let k in schema) {
-			let fieldName = prefix+'.'+k;
-			var schema_ = schema[k];
-			schema[k] = {};
-			if(ElValidator.isArray(schema_)) {
-				schema[k] = {
-					type		: schema_,
+		if(!ElValidator.isObject(schema) )
+			throw new Error('The schema must be an object.');
+		if(ElValidator.hasOwnProperty(schema, '$or')) {
+			if(!ElValidator.isArray(schema.$or))
+				throw new Error(prefix+'.$or must be an array.');
+
+			schema.$or = schema.$or.map((sch, i) => {
+				return this._checkSchema({v:sch}, prefix+'.$or['+i+']').v;
+			});
+		} else if(!ElValidator.hasOwnProperty(schema, 'type') || ElValidator.isObject(schema.type)) {
+			for(let k in schema) {
+				let fieldName = prefix+'.'+k;
+				if(ElValidator.isArray(schema[k])) {
+					schema[k] = {
+						type		: schema[k],
+					}
+				} else if(!ElValidator.isObject(schema[k])) {
+					throw new Error(fieldName+' must be an object.');
 				}
-			} else if(!ElValidator.isObject(schema_)) {
-				throw new Error(fieldName+' must be an object.');
-			} else if(!ElValidator.hasOwnProperty(schema_, '$or') && ElValidator.hasOwnProperty(schema_, 'type')) {
-				schema[k] = {
-					type		: schema_.type,
-				}
+				schema[k] = this._checkSchema(schema[k], fieldName);
 			}
+			return schema;
+			
+		} else if(ElValidator.isArray(schema.type)) {
+			if(schema.type.length!=1)
+				throw new Error(prefix+' must have a single item.');
+			schema.type = [this._checkSchema({v:schema.type[0]}, prefix).v];
+			if(ElValidator.hasOwnProperty(schema, 'minEntries'))
+				schema.minEntries = parseInt(schema.minEntries) || 0;
+			if(ElValidator.hasOwnProperty(schema, 'maxEntries'))
+				schema.maxEntries = parseInt(schema.maxEntries) || 0;
+			if(ElValidator.hasOwnProperty(schema, 'uniqueValues'))
+				schema.uniqueValues = !!schema.uniqueValues;
 
+			if(ElValidator.hasOwnProperty(schema.type[0], 'required'))
+				schema.required = !!schema.type[0].required;
 
-			if(ElValidator.hasOwnProperty(schema_, '$or')) {
-				if(!ElValidator.isArray(schema_.$or))
-					throw new Error(fieldName+'.$or must be an array.');
+			if(schema.minEntries && schema.minEntries>0)
+				schema.required = true;
+		} else if(schema.type===String) {
+			if(ElValidator.hasOwnProperty(schema, 'maxLength'))
+				schema.maxLength = parseInt(schema.maxLength) || 0;
+			if(ElValidator.hasOwnProperty(schema, 'minLength'))
+				schema.minLength = parseInt(schema.minLength) || 0;
 
-				schema[k].$or = schema_.$or.map((sch, i) => {
-					return this._checkSchema({v:sch}, fieldName+'.$or['+i+']').v;
+			if(ElValidator.hasOwnProperty(schema, 'lowercase'))
+				schema.lowercase = !!schema.lowercase;
+			if(ElValidator.hasOwnProperty(schema, 'uppercase'))
+				schema.uppercase = !!schema.uppercase;
+			if(ElValidator.hasOwnProperty(schema, 'trim'))
+				schema.trim = !!schema.trim;
+			if(ElValidator.hasOwnProperty(schema, 'enum')) {
+				if(!ElValidator.isArray(schema.enum))
+					throw new Error(prefix+' must have an array value for its enum field.');
+				schema.enum = schema.enum.map(e=>String(e));
+			}
+			if(ElValidator.hasOwnProperty(schema, 'match')) {
+				if(!(schema.match instanceof RegExp))
+					throw new Error(prefix+' has an invalid RegExp for its "match" field.');
+				schema.match = schema.match;
+			}
+		} else if(schema.type===Number) {
+			if(ElValidator.hasOwnProperty(schema, 'min'))
+				schema.min = parseInt(schema.min) || 0;
+			if(ElValidator.hasOwnProperty(schema, 'max'))
+				schema.max = parseInt(schema.max) || 0;
+			if(ElValidator.hasOwnProperty(schema, 'integer'))
+				schema.integer = !!schema.integer;
+			if(ElValidator.hasOwnProperty(schema, 'enum')) {
+				if(!ElValidator.isArray(schema.enum))
+					throw new Error(prefix+' must have an array value for its enum field.');
+				schema.enum = schema.enum.map(e=>{
+					if(typeof e != 'number')
+						throw new Error(prefix+' enum values need to be numbers.');
+					return parseInt(e)
 				});
-			} else if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
-				schema[k] = this._checkSchema(schema_, fieldName);
-				continue;
-			} else if(ElValidator.isArray(schema[k].type)) {
-				if(schema[k].type.length!=1)
-					throw new Error(fieldName+' must have a single item.');
-				schema[k].type = [this._checkSchema({v:schema[k].type[0]}, fieldName).v];
-				if(ElValidator.hasOwnProperty(schema_, 'minEntries'))
-					schema[k].minEntries = parseInt(schema_.minEntries) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'maxEntries'))
-					schema[k].maxEntries = parseInt(schema_.maxEntries) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'uniqueValues'))
-					schema[k].uniqueValues = !!schema_.uniqueValues;
-
-				if(ElValidator.hasOwnProperty(schema[k].type[0], 'required'))
-					schema[k].required = !!schema[k].type[0].required;
-
-				if(schema[k].minEntries && schema[k].minEntries>0)
-					schema[k].required = true;
-			} else if(schema[k].type===String) {
-				if(ElValidator.hasOwnProperty(schema_, 'maxLength'))
-					schema[k].maxLength = parseInt(schema_.maxLength) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'minLength'))
-					schema[k].minLength = parseInt(schema_.minLength) || 0;
-
-				if(ElValidator.hasOwnProperty(schema_, 'lowercase'))
-					schema[k].lowercase = !!schema_.lowercase;
-				if(ElValidator.hasOwnProperty(schema_, 'uppercase'))
-					schema[k].uppercase = !!schema_.uppercase;
-				if(ElValidator.hasOwnProperty(schema_, 'trim'))
-					schema[k].trim = !!schema_.trim;
-				if(ElValidator.hasOwnProperty(schema_, 'enum')) {
-					if(!ElValidator.isArray(schema_.enum))
-						throw new Error(fieldName+' must have an array value for its enum field.');
-					schema[k].enum = schema_.enum.map(e=>String(e));
-				}
-				if(ElValidator.hasOwnProperty(schema_, 'match')) {
-					if(!(schema_.match instanceof RegExp))
-						throw new Error(fieldName+' has an invalid RegExp for its "match" field.');
-					schema[k].match = schema_.match;
-				}
-			} else if(schema[k].type===Number) {
-				if(ElValidator.hasOwnProperty(schema_, 'min'))
-					schema[k].min = parseInt(schema_.min) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'max'))
-					schema[k].max = parseInt(schema_.max) || 0;
-				if(ElValidator.hasOwnProperty(schema_, 'integer'))
-					schema[k].integer = !!schema_.integer;
-				if(ElValidator.hasOwnProperty(schema_, 'enum')) {
-					if(!ElValidator.isArray(schema_.enum))
-						throw new Error(fieldName+' must have an array value for its enum field.');
-					schema[k].enum = schema_.enum.map(e=>{
-						if(typeof e != 'number')
-							throw new Error(fieldName+' enum values need to be numbers.');
-						return parseInt(e)
-					});
-				}
-			} else if(schema[k].type===Boolean) {
-
-			} else if(schema[k].type===Object) {
-
-			} else if(schema[k].type===Mixed) {
-				if(ElValidator.hasOwnProperty(schema_, 'enum')) {
-					if(!ElValidator.isArray(schema_.enum))
-						throw new Error(fieldName+' must have an array value for its enum field.');
-					schema[k].enum = schema_.enum;
-				}
-			} else {
-				throw new Error(fieldName+' has an invalid value for the "type" field.');
 			}
+		} else if(schema.type===Boolean) {
 
-			if(ElValidator.hasOwnProperty(schema_, 'default'))
-				schema[k].default = schema_.default;
-			if(ElValidator.hasOwnProperty(schema_, 'required'))
-				schema[k].required = !!schema_.required;
-			if(ElValidator.hasOwnProperty(schema_, 'name'))
-				schema[k].name = String(schema_.name);
-			if(ElValidator.hasOwnProperty(schema_, 'validator')) {
-				if(typeof schema_.validator != 'function')
-					throw new Error(fieldName+' must have a function for the "validator" field.');
-				schema[k].validator = schema_.validator;
+		} else if(schema.type===Object) {
+
+		} else if(schema.type===Mixed) {
+			if(ElValidator.hasOwnProperty(schema, 'enum')) {
+				if(!ElValidator.isArray(schema.enum))
+					throw new Error(prefix+' must have an array value for its enum field.');
+				schema.enum = schema.enum;
 			}
+		} else {
+			throw new Error(prefix+' has an invalid value for the "type" field.');
+		}
 
+		if(ElValidator.hasOwnProperty(schema, 'default'))
+			schema.default = schema.default;
+		if(ElValidator.hasOwnProperty(schema, 'required'))
+			schema.required = !!schema.required;
+		if(ElValidator.hasOwnProperty(schema, 'name'))
+			schema.name = String(schema.name);
+		if(ElValidator.hasOwnProperty(schema, 'validator')) {
+			if(typeof schema.validator != 'function')
+				throw new Error(prefix+' must have a function for the "validator" field.');
+			schema.validator = schema.validator;
 		}
 		return schema;
 	}
@@ -139,9 +131,38 @@ export default class ElValidator {
 		else
 			throw new Error(err);
 	}
-	async _validateField(fieldVal, schema, fieldsPrefix) {
-		var fieldName = schema.name || fieldsPrefix;
+	async _validate(fieldVal, schema, fieldsPrefix='') {
+		var fieldName = schema.name || fieldsPrefix || 'Input';
 		if(typeof fieldVal!='undefined') {
+			if(ElValidator.hasOwnProperty(schema, '$or')) {
+				var initialVal = fieldVal;
+				var fieldVal = undefined;
+				var originalErrors = this.errors;
+				for(let k in schema.$or) {
+					this.errors = [];
+					fieldVal = undefined;
+					try {
+						fieldVal = await this._validate(initialVal, schema.$or[k], fieldName+'.$or['+k+']');
+						if(this.errors.length==0 && typeof fieldVal!='undefined') { // We found a match
+							break;
+						} else {
+							fieldVal = undefined;
+						}
+					} catch(e) {
+						fieldVal = undefined;
+					}
+				}
+				this.errors = originalErrors;
+				if(typeof fieldVal=='undefined') {
+					if (ElValidator.hasOwnProperty(schema, 'default')) {
+						fieldVal = schema.default;
+					} else if (ElValidator.hasOwnProperty(schema, 'required') && schema.required) {
+						this._error('The "'+fieldName+'" field is required.');
+					}
+				}
+				return fieldVal;
+			}
+
 			switch(schema.type) {
 				case String:
 					if(!ElValidator.isString(fieldVal)) {
@@ -252,9 +273,9 @@ export default class ElValidator {
 
 						var out = [];
 						for(let i in fieldVal) {
-							var sItem = await this._validate({value:fieldVal[i]}, {value:schema.type[0]}, fieldsPrefix+'['+i+']');
-							if(ElValidator.isObject(sItem) && ElValidator.hasOwnProperty(sItem, 'value'))
-								out.push(sItem.value);
+							var sItem = await this._validate(fieldVal[i], schema.type[0], fieldName+'['+i+']');
+							if(typeof sItem !='undefined')
+								out.push(sItem);
 							else if (this.options.strictMode)
 								this._error('The "'+fieldName+'" array has an invalid value at index "'+i+'".');
 						}
@@ -281,7 +302,25 @@ export default class ElValidator {
 								return;
 							}
 						}
-						fieldVal = await this._validate(fieldVal, schema, fieldsPrefix);
+						var out = {};
+						if(this.options.throwUnkownFields) {
+							for(let k in fieldVal) {
+								if(!ElValidator.hasOwnProperty(schema, k)) {
+									this._error('Field "'+k+'" is not known.');
+									continue;
+								}
+							}
+						}
+						for(let k in schema) {
+							//fieldVal = await this._validate(fieldVal[k], schema[k], fieldsPrefix+'.'+k);
+							if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
+								out[k] = fieldVal[k] || {};
+							}
+							var val = await this._validate(fieldVal[k], schema[k], fieldName+'.'+k);
+							if(typeof val!='undefined')
+								out[k] = val;
+						}
+						fieldVal = out;
 					}
 				break;
 			}
@@ -302,66 +341,6 @@ export default class ElValidator {
 			}
 		}
 		return fieldVal;
-	}
-
-	async _validate(data, schema, fieldsPrefix) {
-		if(!ElValidator.isObject(data)) {
-			return this._error('Invalid data field "'+fieldsPrefix+'". It must be an Object.');
-		}
-
-		var out = {};
-		if(this.options.throwUnkownFields) {
-			for(let k in data) {
-				if(!ElValidator.hasOwnProperty(schema, k)) {
-					this._error('Field "'+k+'" is not known.');
-					continue;
-				}
-			}
-		}
-
-		for(let k in schema) {
-			if(ElValidator.hasOwnProperty(schema[k], '$or')) {
-				var initialVal = data[k];
-				var fieldVal = undefined;
-				if(typeof initialVal!='undefined') {
-					var originalErrors = this.errors;
-					for(let $or of schema[k].$or) {
-						this.errors = [];
-						fieldVal = undefined;
-						try {
-							fieldVal = await this._validateField(initialVal, $or, fieldsPrefix?fieldsPrefix+'.'+k:k);
-							if(this.errors.length==0 && typeof fieldVal!='undefined') { // We found a match
-								break;
-							} else {
-								fieldVal = undefined;
-							}
-						} catch(e) {
-							fieldVal = undefined;
-						}
-					}
-					this.errors = originalErrors;
-				}
-				if(typeof fieldVal=='undefined') {
-					if (ElValidator.hasOwnProperty(schema[k], 'default')) {
-						fieldVal = schema[k].default;
-					} else if (ElValidator.hasOwnProperty(schema[k], 'required') && schema[k].required) {
-						this._error('The "'+(schema[k].name || (fieldsPrefix?fieldsPrefix+'.'+k:k))+'" field is required.');
-						continue;
-					}
-				}
-				if(typeof fieldVal!='undefined')
-					out[k] = fieldVal;
-			} else {
-				var fieldVal = data[k];
-				if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
-					fieldVal = data[k] || {};
-				}
-				var val = await this._validateField(fieldVal, schema[k], fieldsPrefix?fieldsPrefix+'.'+k:k);
-				if(typeof val!='undefined')
-					out[k] = val;
-			}
-		}
-		return out;
 	}
 
 	static get Builtins() {

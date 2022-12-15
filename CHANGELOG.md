@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.0] - 2022-12-15
+### Fixed
+- Refactored the schema and validation modules to allow for more flexibility. (You can now put an $or operation at the root of the schema or validate arrays right away)
+
 ## [1.6.6] - 2022-12-13
 ### Fixed
 - integer option not properly checked
