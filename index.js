@@ -157,7 +157,7 @@ export default class ElValidator {
 					if (ElValidator.hasOwnProperty(schema, 'default')) {
 						fieldVal = schema.default;
 					} else if (ElValidator.hasOwnProperty(schema, 'required') && schema.required) {
-						this._error('The "'+fieldName+'" field is required.');
+						this._error('The "'+fieldName+'" field matches none of the possible formats.');
 					}
 				}
 				return fieldVal;
@@ -314,9 +314,9 @@ export default class ElValidator {
 						for(let k in schema) {
 							//fieldVal = await this._validate(fieldVal[k], schema[k], fieldsPrefix+'.'+k);
 							if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
-								out[k] = fieldVal[k] || {};
+								fieldVal[k] = fieldVal[k] || {};
 							}
-							var val = await this._validate(fieldVal[k], schema[k], fieldName+'.'+k);
+							var val = await this._validate(fieldVal[k], schema[k], (schema.name || fieldsPrefix)?(schema.name || fieldsPrefix)+'.'+k:k);
 							if(typeof val!='undefined')
 								out[k] = val;
 						}

@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.1] - 2022-12-15
+### Fixed
+- Issue of sub-documents defaulting to {} when validation fails.
+- Better error message when $or doesn't validate.
+
 ## [1.7.0] - 2022-12-15
 ### Fixed
 - Refactored the schema and validation modules to allow for more flexibility. (You can now put an $or operation at the root of the schema or validate arrays right away)
