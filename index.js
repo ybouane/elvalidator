@@ -316,7 +316,7 @@ export default class ElValidator {
 							if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
 								fieldVal[k] = fieldVal[k] || {};
 							}
-							var val = await this._validate(fieldVal[k], schema[k], (schema.name || fieldsPrefix)?(schema.name || fieldsPrefix)+'.'+k:k);
+							var val = await this._validate(fieldVal[k], schema[k], fieldsPrefix?fieldsPrefix+'.'+k:k);
 							if(typeof val!='undefined')
 								out[k] = val;
 						}
