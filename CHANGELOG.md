@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.3] - 2022-12-23
+### Fixed
+- Corrected bug in the $or logic.
+
 ## [1.7.2] - 2022-12-15
 ### Fixed
 - Issue of error message refering to invalid variable name.

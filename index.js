@@ -8,7 +8,6 @@ export default class ElValidator {
 		this.schema = this._checkSchema(schema);
 		this.options = options;
 		this.errors = [];
-		//console.dir(this.schema, { depth: null });
 	}
 
 
@@ -135,9 +134,10 @@ export default class ElValidator {
 		var fieldName = schema.name || fieldsPrefix || 'Input';
 		if(typeof fieldVal!='undefined') {
 			if(ElValidator.hasOwnProperty(schema, '$or')) {
-				var initialVal = fieldVal;
+				var initialVal = structuredClone(fieldVal);
 				var fieldVal = undefined;
 				var originalErrors = this.errors;
+				let $orErrors = [];
 				for(let k in schema.$or) {
 					this.errors = [];
 					fieldVal = undefined;
@@ -146,6 +146,7 @@ export default class ElValidator {
 						if(this.errors.length==0 && typeof fieldVal!='undefined') { // We found a match
 							break;
 						} else {
+							$orErrors.push(...this.errors);
 							fieldVal = undefined;
 						}
 					} catch(e) {
@@ -158,6 +159,8 @@ export default class ElValidator {
 						fieldVal = schema.default;
 					} else if (ElValidator.hasOwnProperty(schema, 'required') && schema.required) {
 						this._error('The "'+fieldName+'" field matches none of the possible formats.');
+						/*for(let err of $orErrors)
+							this._error(err);*/
 					}
 				}
 				return fieldVal;
@@ -313,7 +316,7 @@ export default class ElValidator {
 						}
 						for(let k in schema) {
 							//fieldVal = await this._validate(fieldVal[k], schema[k], fieldsPrefix+'.'+k);
-							if(!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type)) {
+							if(!ElValidator.hasOwnProperty(schema[k], '$or') && (!ElValidator.hasOwnProperty(schema[k], 'type') || ElValidator.isObject(schema[k].type))) {
 								fieldVal[k] = fieldVal[k] || {};
 							}
 							var val = await this._validate(fieldVal[k], schema[k], fieldsPrefix?fieldsPrefix+'.'+k:k);
