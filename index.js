@@ -1,12 +1,14 @@
 export const Mixed = Symbol('Mixed');
 export default class ElValidator {
-	constructor(schema={}, options={
-		strictMode			: true, // When disabled, the validator will go easy on the errors. (i.e. a number is provided instead of a string the number will be converted to a string instead of throwing an error)
-		throwUnkownFields	: false,// Throw error when an unknown field is present
-		accumulateErrors	: false,// Validate everything and then show big error message (vs. throw error as soon as an issue is detected)
-	}) {
+	constructor(schema={}, options={}) {
 		this.schema = this._checkSchema(schema);
-		this.options = options;
+		this.options = {
+			strictMode			: true, // When disabled, the validator will go easy on the errors. (i.e. a number is provided instead of a string the number will be converted to a string instead of throwing an error)
+			throwUnkownFields	: false,// Throw error when an unknown field is present
+			accumulateErrors	: false,// Validate everything and then show big error message (vs. throw error as soon as an issue is detected)
+			dismissEmptyObjects	: true,// Whether to dismiss subschema objects when empty
+			...options
+		};
 		this.errors = [];
 	}
 
@@ -323,6 +325,8 @@ export default class ElValidator {
 							if(typeof val!='undefined')
 								out[k] = val;
 						}
+						if(this.options.dismissEmptyObjects && fieldsPrefix!=='' && Object.keys(out).length==0)
+							return undefined;
 						fieldVal = out;
 					}
 				break;

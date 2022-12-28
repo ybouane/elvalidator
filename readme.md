@@ -51,6 +51,8 @@ let validator = new ElValidator({
   throwUnkownFields : false,
   // Validate everything and then show big error message (vs. throw error as soon as an issue is detected)
   accumulateErrors  : false,
+  // Whether to dismiss subschema objects when empty
+  dismissEmptyObjects	: false
 });
 
 // Validate/Sanitize a data object

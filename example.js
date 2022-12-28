@@ -41,6 +41,7 @@ let validator = new ElValidator({
 	strictMode			: true,
 	throwUnkownFields	: false,
 	accumulateErrors	: false,
+	dismissEmptyObjects	: true,
 });
 
 // Validate/Sanitize a data object

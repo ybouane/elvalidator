@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.4] - 2022-12-28
+### Added
+- dismissEmptyObjects option.
+### Fixed
+- default options not applying correctly.
+
 ## [1.7.3] - 2022-12-23
 ### Fixed
 - Corrected bug in the $or logic.
