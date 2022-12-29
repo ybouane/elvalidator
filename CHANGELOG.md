@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.6] - 2022-12-29
+### Fixed
+- Builtin Regexes to be compatible with Safari.
+
+## [1.7.5] - 2022-12-28
+### Fixed
+- dismissEmptyObjects to apply to top-level object too.
+
 ## [1.7.4] - 2022-12-28
 ### Added
 - dismissEmptyObjects option.

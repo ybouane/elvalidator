@@ -1,6 +1,6 @@
 {
   "name": "elvalidator",
-  "version": "1.7.4",
+  "version": "1.7.6",
   "description": "Validate and Sanitize JSON objects.",
   "main": "index.js",
   "type": "module",
