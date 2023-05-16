@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [unreleased]
 - TODO
 
+## [1.7.7] - 2023-05-16
+### Fixed
+- min and max options for Number type to allow float values.
+
 ## [1.7.6] - 2022-12-29
 ### Fixed
 - Builtin Regexes to be compatible with Safari.

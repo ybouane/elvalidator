@@ -77,9 +77,9 @@ export default class ElValidator {
 			}
 		} else if(schema.type===Number) {
 			if(ElValidator.hasOwnProperty(schema, 'min'))
-				schema.min = parseInt(schema.min) || 0;
+				schema.min = parseFloat(schema.min) || 0;
 			if(ElValidator.hasOwnProperty(schema, 'max'))
-				schema.max = parseInt(schema.max) || 0;
+				schema.max = parseFloat(schema.max) || 0;
 			if(ElValidator.hasOwnProperty(schema, 'integer'))
 				schema.integer = !!schema.integer;
 			if(ElValidator.hasOwnProperty(schema, 'enum')) {
@@ -88,7 +88,7 @@ export default class ElValidator {
 				schema.enum = schema.enum.map(e=>{
 					if(typeof e != 'number')
 						throw new Error(prefix+' enum values need to be numbers.');
-					return parseInt(e)
+					return parseFloat(e)
 				});
 			}
 		} else if(schema.type===Boolean) {
